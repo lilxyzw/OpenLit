@@ -28,7 +28,7 @@ Shader "OpenToonLit"
         _BeforeExposureLimit    ("Before Exposure Limit", Float) = 10000
         _MonochromeLighting     ("Monochrome lighting", Range(0,1)) = 0
         _AlphaBoostFA           ("Boost Transparency in ForwardAdd", Range(1,100)) = 10
-        _LightDirectionOverride ("Light Direction Override", Vector) = (0,0.001,0,0)
+        _LightDirectionOverride ("Light Direction Override", Vector) = (0.001,0.002,0.001,0)
 
         // Based on Semantic Versioning 2.0.0
         // https://semver.org/spec/v2.0.0.html
