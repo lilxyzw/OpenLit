@@ -14,3 +14,8 @@ This file is a library that contains lighting functions. When copying and using 
 
 ## OpenToonLit.shader
 This file is a shader example using OpenLit Library. It may be easier to create a custom shader by copying only what you need from this shader.
+
+## Others
+This library isn't perfect and there may be better lighting calculations. So welcome your ideas for improvement.
+
+Special thanks to [poiyomi](https://twitter.com/poiyomi)
