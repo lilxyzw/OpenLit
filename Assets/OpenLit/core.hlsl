@@ -1,4 +1,4 @@
-// OpenLit Library 1.0.0
+// OpenLit Library 1.0.1
 // This code is licensed under CC0 1.0 Universal.
 // https://creativecommons.org/publicdomain/zero/1.0/
 
@@ -81,7 +81,8 @@ void ComputeLightDirection(out float3 lightDirection, out float3 lightDirectionF
     float3 customDir = ComputeCustomLightDirection(lightDirectionOverride);
 
     lightDirection = normalize(sh9DirAbs + mainDir + customDir);
-    lightDirectionForSH9 = normalize(sh9Dir + mainDir + customDir);
+    lightDirectionForSH9 = sh9Dir + mainDir;
+    lightDirectionForSH9 = dot(lightDirectionForSH9,lightDirectionForSH9) < 0.000001 ? 0 : normalize(lightDirectionForSH9);
 }
 
 void ComputeLightDirection(out float3 lightDirection, out float3 lightDirectionForSH9)

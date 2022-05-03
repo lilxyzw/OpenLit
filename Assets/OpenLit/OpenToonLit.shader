@@ -34,7 +34,7 @@ Shader "OpenToonLit"
         // https://semver.org/spec/v2.0.0.html
         [HideInInspector] _OpenLitVersionMAJOR ("MAJOR", Int) = 1
         [HideInInspector] _OpenLitVersionMINOR ("MINOR", Int) = 0
-        [HideInInspector] _OpenLitVersionPATCH ("PATCH", Int) = 0
+        [HideInInspector] _OpenLitVersionPATCH ("PATCH", Int) = 1
 
         //------------------------------------------------------------------------------------------------------------------------------
         // [OpenLit] ForwardBase
