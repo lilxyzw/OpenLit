@@ -4,13 +4,13 @@ This library makes it easy to create toon shaders that do the same lighting. Thi
 ## Purpose of this library
 - Good behavior in environments where the user has no control over the lighting
 - Make the brightness close to Standard Shader
-- Get the same brightness as your friends on VRSNS
+- Make the brightness the same as your friends in VRSNS
 - Make it easy to use multiple different shaders with one avatar
 
 Lightmaps are not supported. This is because the user has control over the lighting in the world.
 
 ## core.hlsl
-This file is a library that contains lighting functions.
+This file is a library that contains lighting functions. When copying and using it, delete `.meta` so that the problem due to duplicate UUID does not occur.
 
 ## OpenToonLit.shader
-This file is a shader example using OpenLit Library.
+This file is a shader example using OpenLit Library. It may be easier to create a custom shader by copying only what you need from this shader.
