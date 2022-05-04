@@ -1,22 +1,22 @@
 # OpenLit
-This library makes it easy to create toon shaders that do the same lighting. This library is licensed under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
+このライブラリを使用すると、同様のライティングを行うトゥーンシェーダーを簡単に作成できます。このライブラリは[CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/)で公開されています。
 
-## Purpose of this library
-- Good behavior in environments where the user has no control over the lighting
-- Make the brightness close to Standard Shader
-- Make the brightness the same as your friends in VRSNS
-- Make it easy to use multiple different shaders with one avatar
+## ライブラリの目的
+- ユーザーが照明を制御できない環境での良好な動作
+- Standard Shaderに近い明るさにする
+- VRSNSでフレンドと同じ明るさにする
+- 1つのアバターで複数の異なるシェーダーを手軽に利用できるようにする
 
-Lightmaps are not supported. This is because the user has control over the lighting in the world.
+ワールド制作ではユーザーがライティングを制御できるため、ライトマップはサポートしていません。
 
 ## core.hlsl
-This file is a library that contains lighting functions. When copying and using it, delete `.meta` so that the problem due to duplicate UUID does not occur.
+ライティングの関数をまとめたものです。コピーして使用する場合は`.meta`ファイルを削除してUUIDの重複による問題が発生しないようにしてください。
 
 ## OpenToonLit.shader
-This file is a shader example using OpenLit Library. It may be easier to create a custom shader by copying only what you need from this shader.
+OpenLitライブラリを使用したシェーダーの例です。このシェーダーから必要な部分だけをコピーしてカスタムシェーダーを作成する方法が手軽かもしれません。
 
 ## Details
-This library supports these lighting environments.
+このライブラリは、これらのライティング環境をサポートしています。
 
 - Directional Light
 - Point Light
@@ -24,11 +24,11 @@ This library supports these lighting environments.
 - Environment Light
 - Light Probe
 
-"Environment Light" and "Light Probe" are implemented using `ShadeSH9()`. However, it looks bad as a toon shader, so some changes have been made.
+"Environment Light"と"Light Probe"は`ShadeSH9()`を使用して実装されます。ただし、トゥーンシェーダーとしては見栄えが悪くなるため、いくつか変更が加えられています。
 
-### Light Direction
+### ライト方向
 
-First, the light direction is implemented as follows. Since `unity_SHAr.xyz` represents the bias of [spherical harmonics](https://docs.unity3d.com/Manual/LightProbes-TechnicalInformation.html), the direction of `ShadeSH9()` can be calculated in a pseudo manner from here. Finally, blend this with the directional light to find the brightest point. However, since spherical harmonics are rarely used to control the direction of the light, the one with the light direction facing up is used for shading. If the light direction does not exist, it will fall back to the `Light Direction Override` set in the material.
+まず、ライト方向は次のように実装されています。`unity_SHAr.xyz`は[球面調和](https://docs.unity3d.com/Manual/LightProbes-TechnicalInformation.html)の偏りを表すため、`ShadeSH9()`の方向はここから擬似的に計算できます。最後に、これとDirectional Lightを合成して最も明るいポイントを計算します。ただし、球面調和でライト方向を制御するケースはめったにないため、ライト方向を上に向けたものをシェーディングに使用します。ライトが全くない場合はマテリアルに設定された`Light Direction Override`にフォールバックします。
 
 https://github.com/lilxyzw/OpenLit/blob/main/Assets/OpenLit/core.hlsl#L65-L86
 ```HLSL
@@ -57,7 +57,7 @@ void ComputeLightDirection(out float3 lightDirection, out float3 lightDirectionF
 ```
 
 ### Environment Light / Light Probe
-Then calculate `ShadeSH9()` using the light direction. Find the brightest point using the light vector calculated earlier. Also, invert the vector to find the shadow color. However, if you use the light vector as is, it will be extremely bright, so the vector is made a little smaller.
+次に、`ShadeSH9()`を計算します。先程計算したライトベクトルを使用して、最も明るいポイントの色を求めます。また、ベクトルを反転して影の色を求めます。ただし、ベクトルをそのまま使用すると非常に明るくなるため、ベクトルを少し小さくします。
 
 https://github.com/lilxyzw/OpenLit/blob/main/Assets/OpenLit/core.hlsl#L95-L121
 ```HLSL
@@ -90,7 +90,7 @@ void ShadeSH9ToonDouble(float3 lightDirection, out float3 shMax, out float3 shMi
 }
 ```
 
-And the color of the directional light is added.
+そして、Directional Lightの色を加算します。
 
 https://github.com/lilxyzw/OpenLit/blob/main/Assets/OpenLit/core.hlsl#L146-L178
 ```HLSL
@@ -108,8 +108,8 @@ void ComputeLights(out float3 lightDirection, out float3 directLight, out float3
 }
 ```
 
-### Vertex Light
-Vertex light attenuation is different from what is calculated by ForwardAdd. This causes the problem of sudden darkening when the mesh goes out of range of the light. So I created a function that reproduces the `_LightTexture0` used to attenuate ForwardAdd.
+### 頂点ライト
+頂点ライトの減衰はForwardAddのものとは異なります。これは、メッシュがライトに範囲外になると突然暗くなるという問題を引き起こします。そこで、ForwardAddで使用される`_LightTexture0`を再現する関数を作成しました。
 
 https://github.com/lilxyzw/OpenLit/blob/main/Assets/OpenLit/core.hlsl#L242-L262
 ```HLSL
@@ -136,10 +136,10 @@ float3 ComputeAdditionalLights(float3 positionWS, float3 positionCS)
 }
 ```
 
-Normally, vertex lights should be added, but spotlights set to `Not Important` cause problems. This is because the `Spot Angle` is ignored and calculated as a point light. Therefore, avatars with multiple skinned mesh renderers will have different brightness for each mesh. Originally these should be combined into one, but due to convenience issues many users use multiple skinned mesh renderers. So the intensity of the vertex light is set to 0 by default.
+通常は頂点ライトを加算するべきですが、`Not Important`に設定されたスポットライトで問題が発生します。これは`Spot Angle`が無視され、ポイントライトとして計算されるためです。したがって、複数のSkinned Mesh Rendererを持つアバターでメッシュごとに明るさが異なることになります。本来であればメッシュを1つにまとめる必要がありますが、利便性の問題で多くのユーザーは複数のSkinned Mesh Rendererを使用しています。そのため、頂点ライトの強度はデフォルトで0に設定されています。
 
 ### ForwardAdd
-ForwardAdd attenuation is basically calculated in the same way as standard shader. However, if you add it as it is, it will cause severe overexposure. Therefore, `BlendOp Max` is used to work around this issue. This will prevent overexposure if the fragment shader output is clamped. However, this blending method causes problems with transparent materials, so transparency is boosted.
+ForwardAddの減衰はStandard Shaderと同様に計算されます。ただし、そのまま加算すると激しい白飛びを引き起こします。したがって、この問題を回避するために`BlendOp Max`を使用しています。これにより、Fragment Shaderの出力がクランプされていれば白飛びを防ぐことができます。ただし、このブレンド方法では透過マテリアルで問題が発生するため透明度のブーストを行っています。
 
 https://github.com/lilxyzw/OpenLit/blob/main/Assets/OpenLit/OpenToonLit.shader#L273-L274
 ```HLSL
@@ -147,7 +147,7 @@ https://github.com/lilxyzw/OpenLit/blob/main/Assets/OpenLit/OpenToonLit.shader#L
 col.rgb *= saturate(col.a * _AlphaBoostFA);
 ```
 
-## Others
-This library isn't perfect and there may be better lighting calculations. So welcome your ideas for improvement.
+## その他
+このライブラリは完璧ではなく、より良い手法があると思います。もし改善のためのアイデアがあれば是非投稿してください。
 
 Special thanks to [poiyomi](https://twitter.com/poiyomi)
