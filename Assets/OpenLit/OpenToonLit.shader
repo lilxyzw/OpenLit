@@ -262,7 +262,7 @@ Shader "OpenToonLit"
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
                 UNITY_LIGHT_ATTENUATION(attenuation, i, i.positionWS);
                 float3 N = normalize(i.normalWS);
-                float3 L = UnityWorldSpaceLightDir(i.positionWS);
+                float3 L = normalize(UnityWorldSpaceLightDir(i.positionWS));
                 float NdotL = dot(N,L);
                 float factor = NdotL > _ShadowThreshold ? 1 : 0;
 
